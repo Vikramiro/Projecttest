@@ -1,0 +1,26 @@
+{
+    "Resources": {
+        "testjenkins": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+				 "ImageId" : "ami-0520e698dd500b1d1",
+				 "InstanceType" : "t2.micro",
+				 "KeyName" : "Keypairkarthiksiva",
+				 "SecurityGroupIds" : [ "sg-0704faa80f6e02158" ],
+				 "SubnetId" : "subnet-0714066f",
+				 "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
+					"#!/bin/bash -xe\n",
+					"dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo \n",
+					"yum install docker-ce --nobest \n",
+					"useradd viki \n",
+					"usermod -g docker viki \n",
+					"mkdir /var/jenkins_home \n",
+					"chown viki:docker /var/jenkins_home -R \n",
+					"chmod 777 /var/jenkins_home -R \n",
+					"docker pull jenkins:latest \n",
+					"docker run -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home -d --name jenkinsme jenkins\/jenkins \n"
+					]]}}
+				 }
+        }
+    }
+}

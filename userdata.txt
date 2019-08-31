@@ -1,0 +1,11 @@
+dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install docker-ce --nobest
+useradd viki
+usermod -g docker viki
+mkdir /var/jenkins_home\n
+chown viki:docker /var/jenkins_home -R
+chmod 777 /var/jenkins_home -R
+systemctl enable docker
+systemctl start docker
+docker pull jenkins\/jenkins:latest
+docker run -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home -d --name jenkins jenkins\/jenkins
